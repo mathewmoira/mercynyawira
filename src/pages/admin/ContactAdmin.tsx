@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { format } from 'date-fns';
-import { Mail, Phone, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { Mail, Phone, CheckCircle, XCircle } from 'lucide-react';
 
 interface Contact {
   id: string;
@@ -54,46 +54,44 @@ export default function ContactAdmin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-primary pt-32 pb-12">
+      <div className="min-h-screen bg-primary py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center">
-            <Loader2 className="w-8 h-8 text-gold animate-spin" />
-          </div>
+          <div className="text-center text-gold">Loading...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-primary pt-32 pb-12">
+    <div className="min-h-screen bg-primary py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gold mb-8">Contact Submissions</h1>
 
-        <div className="bg-primary-light rounded-lg shadow-lg overflow-hidden border border-gold/20">
+        <div className="bg-primary-light rounded-lg shadow overflow-hidden border border-gold/20">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gold/20">
               <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider bg-primary/50">
+                <tr className="bg-primary">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider">
                     Contact
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider bg-primary/50">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider">
                     Message
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider bg-primary/50">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider bg-primary/50">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider">
                     Date
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gold uppercase tracking-wider bg-primary/50">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gold uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gold/20">
                 {contacts.map((contact) => (
-                  <tr key={contact.id} className="hover:bg-primary/30 transition-colors">
+                  <tr key={contact.id} className="hover:bg-primary/50">
                     <td className="px-6 py-4">
                       <div className="text-sm">
                         <div className="font-medium text-offwhite">
@@ -122,10 +120,10 @@ export default function ContactAdmin() {
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded-full ${
                           contact.status === 'new'
-                            ? 'bg-blue-900/20 text-blue-400'
+                            ? 'bg-blue-100 text-blue-800'
                             : contact.status === 'contacted'
-                            ? 'bg-yellow-900/20 text-yellow-400'
-                            : 'bg-green-900/20 text-green-400'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-green-100 text-green-800'
                         }`}
                       >
                         {contact.status}
@@ -139,7 +137,7 @@ export default function ContactAdmin() {
                         {contact.status === 'new' && (
                           <button
                             onClick={() => updateStatus(contact.id, 'contacted')}
-                            className="text-yellow-400 hover:text-yellow-300 transition-colors"
+                            className="text-yellow-500 hover:text-yellow-600"
                             title="Mark as Contacted"
                           >
                             <Mail className="w-5 h-5" />
@@ -148,7 +146,7 @@ export default function ContactAdmin() {
                         {contact.status === 'contacted' && (
                           <button
                             onClick={() => updateStatus(contact.id, 'resolved')}
-                            className="text-green-400 hover:text-green-300 transition-colors"
+                            className="text-green-500 hover:text-green-600"
                             title="Mark as Resolved"
                           >
                             <CheckCircle className="w-5 h-5" />
@@ -157,7 +155,7 @@ export default function ContactAdmin() {
                         {contact.status === 'resolved' && (
                           <button
                             onClick={() => updateStatus(contact.id, 'new')}
-                            className="text-red-400 hover:text-red-300 transition-colors"
+                            className="text-red-500 hover:text-red-600"
                             title="Reopen"
                           >
                             <XCircle className="w-5 h-5" />
