@@ -108,17 +108,27 @@ body {
 
 /* Hover animations */
 .hover-lift {
-  transition: transform 0.3s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-5px);
+  @apply transition-transform duration-300 hover:-translate-y-1;
 }
 
 .hover-scale {
-  transition: transform 0.3s ease;
+  @apply transition-transform duration-300 hover:scale-[1.02];
 }
 
-.hover-scale:hover {
-  transform: scale(1.05);
+.bg-gold-gradient {
+  background: linear-gradient(to right, #fbbf24, #f59e0b);
+}
+
+.bg-gold-gradient-hover:hover {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }

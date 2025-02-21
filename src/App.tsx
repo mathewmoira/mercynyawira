@@ -1,25 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import { 
-  Headphones, 
-  MessageSquareText, 
-  Instagram, 
-  Calendar, 
-  Mail,
-  ArrowRight,
-  Star,
-  Users,
-  Clock,
-  CheckCircle,
   Menu,
   X,
-  ChevronLeft,
-  ChevronRight,
   Settings,
   LogOut
 } from 'lucide-react';
@@ -35,11 +18,7 @@ import PortfolioAdmin from './pages/admin/PortfolioAdmin';
 import ContactAdmin from './pages/admin/ContactAdmin';
 import Login from './pages/Login';
 import { RequireAuth, useAuth } from './lib/auth';
-import { supabase } from './lib/supabase';
-import type { Post } from './types/blog';
-import type { Project } from './types/portfolio';
-
-// ... HomePage component remains unchanged ...
+import HomePage from './pages/HomePage';
 
 function App() {
   const location = useLocation();

@@ -1,8 +1,8 @@
 export interface Post {
-  id: string;
+  id: number;
   title: string;
-  content: string;
   slug: string;
+  content: string;
   featured_image?: string;
   published: boolean;
   created_at: string;
