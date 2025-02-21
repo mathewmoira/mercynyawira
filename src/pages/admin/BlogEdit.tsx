@@ -69,7 +69,7 @@ export default function BlogEdit() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-primary pt-32 pb-12">
+      <div className="min-h-screen bg-black pt-32 pb-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center">
             <Loader2 className="w-8 h-8 text-gold animate-spin" />
@@ -80,7 +80,7 @@ export default function BlogEdit() {
   }
 
   return (
-    <div className="min-h-screen bg-primary pt-32 pb-12">
+    <div className="min-h-screen bg-black pt-32 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <button
           onClick={() => navigate('/admin/blog')}
@@ -103,7 +103,7 @@ export default function BlogEdit() {
               required
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full bg-primary border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full bg-black border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
             />
           </div>
 
@@ -116,7 +116,7 @@ export default function BlogEdit() {
               id="featured_image"
               value={formData.featured_image}
               onChange={(e) => setFormData(prev => ({ ...prev, featured_image: e.target.value }))}
-              className="w-full bg-primary border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full bg-black border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default function BlogEdit() {
               rows={15}
               value={formData.content}
               onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-              className="w-full bg-primary border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full bg-black border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
             />
           </div>
 

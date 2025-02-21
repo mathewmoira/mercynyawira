@@ -43,7 +43,7 @@ export default function BlogPost() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-primary py-12">
+      <div className="min-h-screen bg-black py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center text-gold">Loading...</div>
         </div>
@@ -56,7 +56,7 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen bg-primary py-24">
+    <div className="min-h-screen bg-black py-24">
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <button
           onClick={() => navigate('/blog')}

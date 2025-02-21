@@ -11,6 +11,8 @@ export default function BlogNew() {
     title: '',
     content: '',
     featured_image: '',
+    slug: '',
+    published: false
   });
 
   async function handleSubmit(e: React.FormEvent) {
@@ -20,15 +22,10 @@ export default function BlogNew() {
     try {
       const { error } = await supabase
         .from('posts')
-        .insert([
-          {
-            title: formData.title,
-            content: formData.content,
-            featured_image: formData.featured_image,
-            slug: slugify(formData.title),
-            published: false,
-          },
-        ]);
+        .insert([{
+          ...formData,
+          created_at: new Date().toISOString()
+        }]);
 
       if (error) throw error;
       navigate('/admin/blog');
@@ -41,7 +38,7 @@ export default function BlogNew() {
   }
 
   return (
-    <div className="min-h-screen bg-primary pt-32 pb-12">
+    <div className="min-h-screen bg-black pt-32 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <button
           onClick={() => navigate('/admin/blog')}
@@ -64,8 +61,23 @@ export default function BlogNew() {
               required
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full bg-primary border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full bg-black border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
               placeholder="Enter post title"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="slug" className="block text-sm font-medium text-gold mb-2">
+              Slug
+            </label>
+            <input
+              type="text"
+              id="slug"
+              required
+              value={formData.slug}
+              onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+              className="w-full bg-black border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
+              placeholder="enter-post-slug"
             />
           </div>
 
@@ -78,7 +90,7 @@ export default function BlogNew() {
               id="featured_image"
               value={formData.featured_image}
               onChange={(e) => setFormData(prev => ({ ...prev, featured_image: e.target.value }))}
-              className="w-full bg-primary border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full bg-black border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
               placeholder="https://example.com/image.jpg"
             />
           </div>
@@ -90,30 +102,33 @@ export default function BlogNew() {
             <textarea
               id="content"
               required
-              rows={15}
+              rows={10}
               value={formData.content}
               onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-              className="w-full bg-primary border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full bg-black border border-gold/20 rounded-lg py-3 px-4 text-offwhite placeholder-gold/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
               placeholder="Write your post content here..."
             />
           </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-gold-gradient text-primary px-6 py-3 rounded-full font-semibold hover:bg-gold-gradient-hover transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                'Create Post'
-              )}
-            </button>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="published"
+              checked={formData.published}
+              onChange={(e) => setFormData(prev => ({ ...prev, published: e.target.checked }))}
+              className="h-4 w-4 rounded border-gold/20 text-gold focus:ring-gold/50"
+            />
+            <label htmlFor="published" className="ml-2 block text-sm text-gold">
+              Publish immediately
+            </label>
           </div>
+
+          <button
+            type="submit"
+            className="bg-gold-gradient text-black px-6 py-3 rounded-full font-semibold hover:bg-gold-gradient-hover transition-all duration-300 hover-lift"
+          >
+            Create Post
+          </button>
         </form>
       </div>
     </div>
