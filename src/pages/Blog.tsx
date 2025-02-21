@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { supabase } from '../lib/supabase';
 import type { Post } from '../types/blog';
 import { Loader2 } from 'lucide-react';
+import AnimateIn, { AnimateInStagger } from '../components/AnimateIn';
 
 export default function Blog() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -52,18 +53,30 @@ export default function Blog() {
     <div className="min-h-screen bg-black pt-32 pb-12">
       {/* Background glow effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-gold/20 rounded-full blur-[120px] opacity-40 animate-pulse"></div>
-        <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-gold/20 rounded-full blur-[150px] opacity-30 animate-pulse delay-1000"></div>
+        <AnimateIn type="fade-in" delay={200}>
+          <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-gold/20 rounded-full blur-[120px] opacity-40 animate-pulse"></div>
+        </AnimateIn>
+        <AnimateIn type="fade-in" delay={400}>
+          <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-gold/20 rounded-full blur-[150px] opacity-30 animate-pulse delay-1000"></div>
+        </AnimateIn>
       </div>
 
       {/* Grid background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20"></div>
+      <AnimateIn type="fade-in" delay={100}>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20"></div>
+      </AnimateIn>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gold mb-8 animate-fade-in-up">Blog</h1>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <AnimateIn type="slide-in-up">
+          <h1 className="text-4xl font-bold text-gold mb-8">Blog</h1>
+        </AnimateIn>
+
+        <AnimateInStagger type="scale-in" className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <article key={post.id} className="bg-black rounded-lg shadow-md overflow-hidden border border-gold/20 hover-scale animate-fade-in-up">
+            <article 
+              key={post.id} 
+              className="bg-black rounded-lg shadow-md overflow-hidden border border-gold/20 hover-scale"
+            >
               {post.featured_image && (
                 <img
                   src={post.featured_image}
@@ -90,7 +103,7 @@ export default function Blog() {
               </div>
             </article>
           ))}
-        </div>
+        </AnimateInStagger>
       </div>
     </div>
   );
