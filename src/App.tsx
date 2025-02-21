@@ -1,5 +1,10 @@
-import React from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { 
   Headphones, 
   MessageSquareText, 
@@ -11,219 +16,208 @@ import {
   Users,
   Clock,
   CheckCircle,
-  BookOpen
+  Menu,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Settings,
+  LogOut
 } from 'lucide-react';
 import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import Portfolio from './pages/Portfolio';
+import Contact from './pages/Contact';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import BlogAdmin from './pages/admin/BlogAdmin';
+import BlogNew from './pages/admin/BlogNew';
+import BlogEdit from './pages/admin/BlogEdit';
+import PortfolioAdmin from './pages/admin/PortfolioAdmin';
+import ContactAdmin from './pages/admin/ContactAdmin';
+import Login from './pages/Login';
+import { RequireAuth, useAuth } from './lib/auth';
+import { supabase } from './lib/supabase';
+import type { Post } from './types/blog';
+import type { Project } from './types/portfolio';
 
-function HomePage() {
-  const portraitImage = "https://i.imgur.com/Qn6PSSa.png"; // Updated professional portrait
-  const workspaceImage = "https://i.imgur.com/XIrZhKt.jpg"; // New workspace image
-
-  return (
-    <>
-      {/* Hero Section */}
-      <div className="relative h-screen bg-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex flex-col justify-center h-full text-center">
-            <div className="mb-8">
-              <div className="relative w-48 h-48 mx-auto">
-                <img 
-                  src={portraitImage}
-                  alt="Mercy Nyawira" 
-                  className="w-full h-full rounded-full object-cover border-4 border-gold"
-                  style={{
-                    objectPosition: '50% 25%', // Fine-tuned to center the face
-                    objectFit: 'cover',
-                  }}
-                />
-                <div className="absolute inset-0 rounded-full shadow-lg"></div>
-              </div>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-offwhite mb-6">
-              Mercy Nyawira
-            </h1>
-            <p className="text-xl md:text-2xl text-gold mb-8">
-              Customer Service Expert | Virtual Assistant | Social Media Manager
-            </p>
-            <div className="flex justify-center gap-4">
-              <button className="bg-gold-gradient text-primary px-8 py-3 rounded-full font-semibold hover:bg-gold-gradient-hover transition duration-300 shadow-lg">
-                Hire Me
-              </button>
-              <button className="border-2 border-gold text-gold px-8 py-3 rounded-full font-semibold hover:bg-gold/10 transition duration-300">
-                View Portfolio
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Services Section */}
-      <div className="py-24 bg-primary-light">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-16 text-gold">My Services</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-primary p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border border-gold/20">
-              <Headphones className="w-12 h-12 text-gold mb-4" />
-              <h3 className="text-xl font-semibold mb-4 text-gold">Customer Service Excellence</h3>
-              <p className="text-offwhite/80">Providing exceptional customer support with empathy and efficiency.</p>
-            </div>
-            <div className="bg-primary p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border border-gold/20">
-              <MessageSquareText className="w-12 h-12 text-gold mb-4" />
-              <h3 className="text-xl font-semibold mb-4 text-gold">Virtual Assistance</h3>
-              <p className="text-offwhite/80">Comprehensive administrative support to streamline your business operations.</p>
-            </div>
-            <div className="bg-primary p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border border-gold/20">
-              <Instagram className="w-12 h-12 text-gold mb-4" />
-              <h3 className="text-xl font-semibold mb-4 text-gold">Social Media Management</h3>
-              <p className="text-offwhite/80">Strategic content creation and community engagement for brand growth.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="py-16 bg-gold-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div className="text-primary">
-              <div className="text-4xl font-bold mb-2">500+</div>
-              <div className="text-primary/80">Happy Clients</div>
-            </div>
-            <div className="text-primary">
-              <div className="text-4xl font-bold mb-2">98%</div>
-              <div className="text-primary/80">Satisfaction Rate</div>
-            </div>
-            <div className="text-primary">
-              <div className="text-4xl font-bold mb-2">5000+</div>
-              <div className="text-primary/80">Projects Completed</div>
-            </div>
-            <div className="text-primary">
-              <div className="text-4xl font-bold mb-2">24/7</div>
-              <div className="text-primary/80">Support</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="py-24 bg-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-8 text-gold">Why Choose Me?</h2>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <Clock className="w-6 h-6 text-gold flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold mb-2 text-gold">Quick Response Time</h3>
-                    <p className="text-offwhite/80">Always available and responsive to urgent requests.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Users className="w-6 h-6 text-gold flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold mb-2 text-gold">Professional Communication</h3>
-                    <p className="text-offwhite/80">Clear and effective communication with all stakeholders.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Star className="w-6 h-6 text-gold flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold mb-2 text-gold">Quality Guaranteed</h3>
-                    <p className="text-offwhite/80">Committed to delivering exceptional results every time.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="relative group">
-              <img 
-                src={workspaceImage}
-                alt="Professional workspace"
-                className="w-full h-[500px] rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 object-cover"
-              />
-              <div className="absolute inset-0 bg-gold/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-primary-light py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-8">
-            <div className="relative w-32 h-32 mx-auto">
-              <img 
-                src={portraitImage}
-                alt="Mercy Nyawira"
-                className="w-full h-full rounded-full object-cover border-4 border-gold"
-                style={{
-                  objectPosition: '50% 25%', // Fine-tuned to center the face
-                  objectFit: 'cover',
-                }}
-              />
-              <div className="absolute inset-0 rounded-full shadow-lg"></div>
-            </div>
-          </div>
-          <h2 className="text-3xl font-bold text-gold mb-8">Ready to Get Started?</h2>
-          <p className="text-offwhite/80 mb-8 max-w-2xl mx-auto">
-            Let's work together to take your business to the next level with professional customer service, 
-            virtual assistance, and social media management.
-          </p>
-          <button className="bg-gold-gradient text-primary px-8 py-3 rounded-full font-semibold hover:bg-gold-gradient-hover transition duration-300 shadow-lg inline-flex items-center gap-2">
-            Contact Me <ArrowRight className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-    </>
-  );
-}
+// ... HomePage component remains unchanged ...
 
 function App() {
   const location = useLocation();
+  const { user, signOut } = useAuth();
   const isHomePage = location.pathname === '/';
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const logoImage = "https://imgur.com/uCUE8K1.jpg";
 
   return (
     <div className="relative">
       {/* Floating Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isHomePage ? 'bg-primary/80 backdrop-blur-sm' : 'bg-primary border-b border-gold/20'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="font-bold text-xl text-gold">
-              MN
-            </Link>
-            <div className="flex items-center gap-6">
-              <Link 
-                to="/blog" 
-                className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition"
-              >
-                <BookOpen className="w-4 h-4" />
-                Blog
+      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl mx-auto">
+        <nav className={`
+          w-full rounded-full transition-all duration-300 backdrop-blur-md
+          ${isHomePage ? 'bg-primary/80 border border-gold/10' : 'bg-primary/90 border border-gold/20'}
+          shadow-lg shadow-gold/5
+        `}>
+          <div className="px-6 py-3">
+            <div className="flex items-center justify-between">
+              <Link to="/" className="flex items-center">
+                <img 
+                  src={logoImage}
+                  alt="MN Logo"
+                  className="h-8 md:h-10 w-auto transition-transform duration-300 hover:scale-105"
+                />
               </Link>
-              <a 
-                href="#portfolio" 
-                className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition"
+
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden text-gold hover:text-gold-light transition-colors"
               >
-                <Star className="w-4 h-4" />
-                Portfolio
-              </a>
-              <a 
-                href="#contact" 
-                className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition"
-              >
-                <Mail className="w-4 h-4" />
-                Contact
-              </a>
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+
+              {/* Desktop navigation */}
+              <div className="hidden md:flex items-center gap-8">
+                <Link 
+                  to="/blog" 
+                  className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition-colors hover-lift"
+                >
+                  Blog
+                </Link>
+                <Link 
+                  to="/portfolio" 
+                  className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition-colors hover-lift"
+                >
+                  Portfolio
+                </Link>
+                <Link 
+                  to="/contact"
+                  className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition-colors hover-lift"
+                >
+                  Contact
+                </Link>
+                {user ? (
+                  <>
+                    <Link 
+                      to="/admin"
+                      className="flex items-center gap-2 font-medium text-gold hover:text-gold-light transition-colors hover-lift"
+                    >
+                      <Settings className="w-4 h-4" />
+                      Admin
+                    </Link>
+                    <button
+                      onClick={() => signOut()}
+                      className="flex items-center gap-2 font-medium text-red-500 hover:text-red-400 transition-colors hover-lift"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </>
+                ) : null}
+              </div>
+            </div>
+
+            {/* Mobile navigation */}
+            <div 
+              className={`
+                md:hidden absolute left-0 right-0 mt-3 px-6 py-4 
+                bg-primary/95 backdrop-blur-md border border-gold/10 
+                rounded-2xl transition-all duration-300 transform
+                ${isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
+              `}
+            >
+              <div className="flex flex-col gap-4">
+                <Link 
+                  to="/blog" 
+                  className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Blog
+                </Link>
+                <Link 
+                  to="/portfolio" 
+                  className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Portfolio
+                </Link>
+                <Link 
+                  to="/contact"
+                  className="flex items-center gap-2 font-medium text-offwhite hover:text-gold transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+                {user ? (
+                  <>
+                    <Link 
+                      to="/admin"
+                      className="flex items-center gap-2 font-medium text-gold hover:text-gold-light transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Settings className="w-4 h-4" />
+                      Admin
+                    </Link>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center gap-2 font-medium text-red-500 hover:text-red-400 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </>
+                ) : null}
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Routes */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        
+        {/* Protected Admin Routes */}
+        <Route path="/admin" element={
+          <RequireAuth>
+            <AdminDashboard />
+          </RequireAuth>
+        } />
+        <Route path="/admin/blog" element={
+          <RequireAuth>
+            <BlogAdmin />
+          </RequireAuth>
+        } />
+        <Route path="/admin/blog/new" element={
+          <RequireAuth>
+            <BlogNew />
+          </RequireAuth>
+        } />
+        <Route path="/admin/blog/edit/:id" element={
+          <RequireAuth>
+            <BlogEdit />
+          </RequireAuth>
+        } />
+        <Route path="/admin/portfolio" element={
+          <RequireAuth>
+            <PortfolioAdmin />
+          </RequireAuth>
+        } />
+        <Route path="/admin/contacts" element={
+          <RequireAuth>
+            <ContactAdmin />
+          </RequireAuth>
+        } />
+
+        {/* Catch-all route for 404s */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

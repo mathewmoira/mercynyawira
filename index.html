@@ -5,6 +5,20 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mercy Nyawira - Customer Service Expert & Virtual Assistant</title>
+    <script>
+      // This script helps with client-side routing
+      (function() {
+        const pathname = window.location.pathname;
+        const search = window.location.search;
+        const hash = window.location.hash;
+        
+        // Skip if on the root path
+        if (pathname === '/') return;
+        
+        // Store the full URL in session storage
+        sessionStorage.setItem('spa-path', pathname + search + hash);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

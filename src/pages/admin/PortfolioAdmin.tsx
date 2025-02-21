@@ -1,59 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import type { Post } from '../../types/blog';
+import type { Project } from '../../types/portfolio';
 import { Pencil, Trash2, Plus, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export default function BlogAdmin() {
-  const [posts, setPosts] = useState<Post[]>([]);
+export default function PortfolioAdmin() {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPosts();
+    fetchProjects();
   }, []);
 
-  async function fetchPosts() {
+  async function fetchProjects() {
     try {
       const { data, error } = await supabase
-        .from('posts')
+        .from('projects')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPosts(data || []);
+      setProjects(data || []);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('Error fetching projects:', error);
     } finally {
       setLoading(false);
     }
   }
 
-  async function togglePublished(post: Post) {
+  async function deleteProject(id: string) {
     try {
       const { error } = await supabase
-        .from('posts')
-        .update({ published: !post.published })
-        .eq('id', post.id);
-
-      if (error) throw error;
-      await fetchPosts();
-    } catch (error) {
-      console.error('Error updating post:', error);
-    }
-  }
-
-  async function deletePost(id: string) {
-    try {
-      const { error } = await supabase
-        .from('posts')
+        .from('projects')
         .delete()
         .eq('id', id);
 
       if (error) throw error;
-      await fetchPosts();
+      await fetchProjects();
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.error('Error deleting project:', error);
     }
   }
 
@@ -73,13 +59,13 @@ export default function BlogAdmin() {
     <div className="min-h-screen bg-primary pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gold">Manage Blog Posts</h1>
+          <h1 className="text-3xl font-bold text-gold">Manage Portfolio</h1>
           <button
-            onClick={() => navigate('/admin/blog/new')}
+            onClick={() => navigate('/admin/portfolio/new')}
             className="bg-gold-gradient text-primary px-6 py-3 rounded-full font-semibold hover:bg-gold-gradient-hover transition duration-300 inline-flex items-center gap-2"
           >
             <Plus className="w-5 h-5" />
-            New Post
+            New Project
           </button>
         </div>
 
@@ -92,7 +78,7 @@ export default function BlogAdmin() {
                     Title
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider bg-primary/50">
-                    Status
+                    Technologies
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gold uppercase tracking-wider bg-primary/50">
                     Date
@@ -103,32 +89,32 @@ export default function BlogAdmin() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gold/20">
-                {posts.map((post) => (
-                  <tr key={post.id} className="hover:bg-primary/30 transition-colors">
+                {projects.map((project) => (
+                  <tr key={project.id} className="hover:bg-primary/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-offwhite">
-                        {post.title}
+                        {project.title}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => togglePublished(post)}
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          post.published
-                            ? 'bg-green-900/20 text-green-400'
-                            : 'bg-yellow-900/20 text-yellow-400'
-                        }`}
-                      >
-                        {post.published ? 'Published' : 'Draft'}
-                      </button>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-2 py-1 text-xs font-medium bg-gold/10 text-gold rounded-full"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-offwhite/60">
-                      {new Date(post.created_at).toLocaleDateString()}
+                      {new Date(project.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
                         <button
-                          onClick={() => navigate(`/admin/blog/edit/${post.id}`)}
+                          onClick={() => navigate(`/admin/portfolio/edit/${project.id}`)}
                           className="text-gold hover:text-gold-light transition-colors"
                           title="Edit"
                         >
@@ -136,8 +122,8 @@ export default function BlogAdmin() {
                         </button>
                         <button
                           onClick={() => {
-                            if (confirm('Are you sure you want to delete this post?')) {
-                              deletePost(post.id);
+                            if (confirm('Are you sure you want to delete this project?')) {
+                              deleteProject(project.id);
                             }
                           }}
                           className="text-red-400 hover:text-red-300 transition-colors"
